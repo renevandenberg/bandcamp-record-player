@@ -19,5 +19,5 @@ Play full albums from Bandcamp using a digital record player interface
 ```
 
 # Preview at:
-https://renevandenberg.github.io/bandcamp-record-player/
-https://bandcamp.theoxygent.nl
+- https://renevandenberg.github.io/bandcamp-record-player/
+- https://bandcamp.theoxygent.nl
