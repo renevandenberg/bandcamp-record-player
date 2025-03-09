@@ -17,3 +17,7 @@ Play full albums from Bandcamp using a digital record player interface
 ```
 (...) src="https://bandcamp.com/EmbeddedPlayer/album=714870486/size=small/ (...)
 ```
+
+# Preview at:
+https://renevandenberg.github.io/bandcamp-record-player/
+https://bandcamp.theoxygent.nl
