@@ -7,7 +7,7 @@ function loadAlbum(albumId){
     pause();
     document.getElementById('record-cover').style.width = '250px';
     document.getElementById('record-cover').style.height = '250px';
-    loadJSON('./album/'+albumId).then((data) => {
+    loadJSON('https://bandcamp.theoxygent.nl/api/album.php?id='+albumId).then((data) => {
         window.albumData = {data}; 
         window.albumDuration = getAlbumDuration();
         window.currentTrack = -1;
