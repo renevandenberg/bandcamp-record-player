@@ -1,0 +1,134 @@
+html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif;
+}
+body{
+    background: linear-gradient(to bottom, rgba(128,128,128,0.2) 0, rgba(128,128,128,0.0)) 20% fixed;
+}
+#record-player, #record-controls{
+    vertical-align: middle;
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+#record-player{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(390px,1fr));
+    grid-gap: 5px;
+    text-align: center;
+    justify-items: center;
+    align-items: center;
+}
+html:fullscreen #record-player{
+    margin-top: calc(25vmax - 25vh);
+    max-height: 75vmax;
+}
+html:fullscreen #record-controls{
+    min-height: 25vmax;
+}
+html:fullscreen #record-cover{
+    max-height: 30vmax;
+    max-width: 30vmax;
+}
+#record{
+    max-width: calc(90vw - 250px);
+    max-height: calc(90vw - 250px);
+}
+
+aside{
+    display: inline-block;
+}
+#record{
+    display: inline-block;
+    vertical-align: middle;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 130px solid black;
+    border-top: 131px solid black;
+    overflow: hidden;
+    line-height: 100px;
+    text-align: center;
+    margin-right: 10px;
+}
+#record-print{
+    position: absolute;
+    z-index: 1;        
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+}   
+#record-cover{
+    display: inline-block;
+    vertical-align: middle;
+    width: 350px;
+    height: 350px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    clear: right;
+    margin-right: 10px;
+    transition: width 1s, height 1s;
+    width: 1px;
+    height: 1px;
+}
+
+.rotating{
+    animation:spin 1.8s linear infinite;
+    animation-play-state: paused;
+}
+@keyframes spin { 
+    100% { 
+        -webkit-transform: rotate(360deg); 
+        transform:rotate(360deg); 
+    } 
+}
+button{
+    display: inline-block;
+    border: 0;
+    margin: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    padding: 10px;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; 
+    background-color: #eee;
+    margin: 5px 0;
+    color: black;
+}
+button#bandcamp-action{
+    cursor: pointer;
+}
+input[type=range]{
+    min-width: 350px;
+    width: 80vmin;
+}
+img{
+    border: 0;
+    margin: 0;
+}
+
+#record-store{  
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+  grid-gap: 5px;
+  align-items: center;
+  justify-items: center;
+  padding-top: 20px;
+}
+#record-store img {
+    cursor: grab;
+}
+#record-store img:active {
+    opacity: 0.9;
+}
+button.record-store{
+    display: none;
+}
+
+html:fullscreen button.record-store{
+    display: inline-block;
+}

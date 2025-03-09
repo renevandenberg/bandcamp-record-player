@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Online record player - discover new music from Bandcamp</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="dark light">
+        <base target="_blank">
+
+        <script src="script/main.js"></script>
+        <link rel="stylesheet" href="style/main.css">
+    </head>
+    <body>
+        <div id="record-player">
+
+            <a href="https://bandcamp.com" title="Go to Bandcamp">
+                <img id="record-cover" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+            </a>
+            
+            <div id="record" class="rotating">
+                <div id="record-print"></div>
+            </div>
+        </div>
+        <div id="record-controls">
+
+            
+            <input id="scrobbler" type="range" min="0" max="1" value="0.0" step="0.001" class="slider" id="myRange" onmousedown="pause()" ontouchstart="pause()" onmouseup="seek(parseFloat(this.value))" ontouchend="seek(parseFloat(this.value))"><br />
+            
+            <button onclick="play()">
+                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="0,0 10,5 0,10" />
+                </svg>
+            </button><button onclick="pause()">
+                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2" y="0" height="10" width="2"  />
+                  <rect x="7" y="0" height="10" width="2"  />
+                </svg>
+            </button><button onclick="playNext()">
+                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="0,0 4,5 0,10" />
+                  <polygon points="4,0 8,5 4,10" />
+                  <rect x="8" y="0" height="10" width="2"  />
+                </svg>
+            </button> <button onclick="toggleFullScreen();"><svg width="10" height="10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22" stroke-width="1.5"/>
+<path d="M10 22C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14" stroke-width="1.5" />
+<path d="M10 2C6.22876 2 4.34315 2 3.17157 3.17157C2 4.34315 2 6.22876 2 10" stroke-width="1.5" />
+<path d="M14 2C17.7712 2 19.6569 2 20.8284 3.17157C22 4.34315 22 6.22876 22 10" stroke-width="1.5" />
+</svg></button><button onclick="toggleDarkMode()"><svg 
+    viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                <path d="M16 .5C7.4.5.5 7.4.5 16S7.4 31.5 16 31.5 31.5 24.6 31.5 16 24.6.5 16 .5zm0 28.1V3.4C23 3.4 28.6 9 28.6 16S23 28.6 16 28.6z" />
+            </svg></button>
+            <form>
+                <button id="bandcamp-action" formaction="https://bandcamp.com">go to bandcamp</button>
+            </form>
+            
+            <button class="record-store" onclick="scrollToRecordStore()"><svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="0,0 5,10 10,0" />
+                </svg></button>
+        </div>
+
+        <audio id="audio-controller"></audio>
+
+        <script>
+
+        const audio = document.getElementById('audio-controller');
+        const scrobbler = document.getElementById('scrobbler');
+
+        audio.onended = function() {
+            playNext();
+        }
+
+        audio.ontimeupdate = function() {
+            scrobbler.value = getAlbumPercentage();
+        }
+
+        audio.onplay = audio.onplaying = function(){
+            rotate();
+        }
+        audio.onpause = audio.onwaiting = function(){
+            freeze();
+        }
+        
+        </script>
+        
+        <div id="record-store">
+        
+            <img src="/images/thumb_2798273155.jpg" data-album-id="2798273155" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Amber Arcades - Fading Lines "/>
+            <img src="/images/thumb_667629823.jpg" data-album-id="667629823" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_4101718776.jpg" data-album-id="4101718776" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_760045578.jpg" data-album-id="760045578" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1851076671.jpg" data-album-id="1851076671" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3537272822.jpg" data-album-id="3537272822" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2487616313.jpg" data-album-id="2487616313" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2434176802.jpg" data-album-id="2434176802" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3707277119.jpg" data-album-id="3707277119" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_71893326.jpg" data-album-id="71893326" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1762118406.jpg" data-album-id="1762118406" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2586413852.jpg" data-album-id="2586413852" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_411120297.jpg" data-album-id="411120297" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3887486471.jpg" data-album-id="3887486471" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3001000199.jpg" data-album-id="3001000199" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_4143001836.jpg" data-album-id="4143001836" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2752853366.jpg" data-album-id="2752853366" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_872820319.jpg" data-album-id="872820319" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3330093732.jpg" data-album-id="3330093732" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1273483406.jpg" data-album-id="1273483406" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3029433218.jpg" data-album-id="3029433218" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_4225466187.jpg" data-album-id="4225466187" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2359022561.jpg" data-album-id="2359022561" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1596055656.jpg" data-album-id="1596055656" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_820879568.jpg" data-album-id="820879568" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2611051761.jpg" data-album-id="2611051761" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1734821112.jpg" data-album-id="1734821112" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_909680917.jpg" data-album-id="909680917" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1323222259.jpg" data-album-id="1323222259" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3610961812.jpg" data-album-id="3610961812" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_193840893.jpg" data-album-id="193840893" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_398294654.jpg" data-album-id="398294654" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2744820243.jpg" data-album-id="2744820243" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1661747237.jpg" data-album-id="1661747237" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_600165456.jpg" data-album-id="600165456" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3162059111.jpg" data-album-id="3162059111" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_23859253.jpg" data-album-id="23859253" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_75814477.jpg" data-album-id="75814477" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_4213085711.jpg" data-album-id="4213085711" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_277586152.jpg" data-album-id="277586152" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2134595557.jpg" data-album-id="2134595557" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_1797200513.jpg" data-album-id="1797200513" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_4126731869.jpg" data-album-id="4126731869" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2529545644.jpg" data-album-id="2529545644" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2986837649.jpg" data-album-id="2986837649" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_2637325331.jpg" data-album-id="2637325331" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3728745214.jpg" data-album-id="3728745214" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_120511778.jpg" data-album-id="120511778" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_843244752.jpg" data-album-id="843244752" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" />
+            <img src="/images/thumb_3326020498.jpg" data-album-id="3326020498" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Naxatras - V" />
+            <img src="/images/thumb_2969997311.jpg" data-album-id="2969997311" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="AUCKLANE - GOOD GIRL / BAD SEED " />
+            <img src="/images/thumb_1215743567.jpg" data-album-id="1215743567" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="LOST IN THE SAUCE - Unreal" />
+            <img src="/images/thumb_3966289082.jpg" data-album-id="3966289082" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Pip Blom - Boat" />
+            <img src="/images/thumb_1099192256.jpg" data-album-id="1099192256" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Benny Sings - Young Hearts" />
+            <img src="/images/thumb_4094335852.jpg" data-album-id="4094335852" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Benjamin Herman - Project S" />
+            <img src="/images/thumb_1989710092.jpg" data-album-id="1989710092" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Reinier Baas - Relief Party" />
+            <img src="/images/thumb_1262132067.jpg" data-album-id="1262132067" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Milan W. - Leave Another Day" />
+            <img src="/images/thumb_3823319091.jpg" data-album-id="3823319091" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Black Flower - Kinetic" />
+            <img src="/images/thumb_3028089867.jpg" data-album-id="3028089867" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Bandler Ching - Mercurial" />
+            <img src="/images/thumb_605498052.jpg" data-album-id="605498052" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Stars of the Lid - and their Refinement of the Decline" />
+            <img src="/images/thumb_2665298822.jpg" data-album-id="2665298822" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Alex Koo - Blame It on My Chromosomes" />
+            <img src="/images/thumb_1091763547.jpg" data-album-id="1091763547" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="EMPEREUR - Eau Rouge" />
+            <img src="/images/thumb_3137438187.jpg" data-album-id="3137438187" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Dienne - Conducturis" />
+            <img src="/images/thumb_1360747482.jpg" data-album-id="1360747482" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="analept - Montage" />
+            <img src="/images/thumb_886229148.jpg" data-album-id="886229148" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Timo Lassy & Jukka Eskola - Nordic Stew" />
+            <img src="/images/thumb_2449017039.jpg" data-album-id="2449017039" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Eefje de Visser - Hartslag EP" />
+            <img src="/images/thumb_3274646738.jpg" data-album-id="3274646738" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Otto Taimela - Falling Snow" />
+            <img src="/images/thumb_3698112190.jpg" data-album-id="3698112190" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Marble Sounds - Marble Sounds" />
+            <img src="/images/thumb_231716870.jpg" data-album-id="231716870" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Spinvis - Trein Vuur Dageraad" />
+            <img src="/images/thumb_357378300.jpg" data-album-id="357378300" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Arvo P&auml;rt - F&uuml;r Alina " />
+            <img src="/images/thumb_354896480.jpg" data-album-id="354896480" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title="Jos&eacute; Gonz&aacute;lez - Veneer" />
+            <img src="/images/thumb_445260908.jpg" data-album-id="445260908" onclick="loadAlbum(this.dataset.albumId);" loading="lazy" title=" Daniel Herskedal - Slow Eastbound Train" />
+    
+        </div>
+        <!-- Matomo -->
+        <script>
+        var _paq = window._paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+        var u="https://renevdb.nl/analytics/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '16']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+        })();
+        </script>
+        <!-- End Matomo Code -->
+    </body>
+</html>
