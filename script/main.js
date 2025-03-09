@@ -7,11 +7,11 @@ function loadAlbum(albumId){
     pause();
     document.getElementById('record-cover').style.width = '250px';
     document.getElementById('record-cover').style.height = '250px';
-    loadJSON('https://bandcamp.theoxygent.nl/api/album.php?id='+albumId).then((data) => {
+    loadJSON('./album/'+albumId).then((data) => {
         window.albumData = {data}; 
         window.albumDuration = getAlbumDuration();
         window.currentTrack = -1;
-        document.getElementById('record-print').style.backgroundImage = 'url(/images/thumb_'+albumId+'.jpg)';
+        document.getElementById('record-print').style.backgroundImage = 'url(images/thumb_'+albumId+'.jpg)';
         document.getElementById('record-cover').src = window.albumData.data.album_art_lg;
         document.getElementById('record-cover').style.width = '350px';
         document.getElementById('record-cover').style.height = '350px';
